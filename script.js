@@ -151,12 +151,12 @@ function loadAds() {
         let imageDisplay = '';
         if (ad.icon) {
             if (ad.icon.startsWith('http') || ad.icon.startsWith('data:image') || ad.icon.startsWith('logo.')) {
-                imageDisplay = `<img src="${ad.icon}" alt="${ad.title}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;" onerror="this.outerHTML='<span style=\\'font-size: 3rem;\\'>🎉</span>'">`;
+                imageDisplay = `<img src="${ad.icon}" alt="${ad.title}" onerror="this.outerHTML='<span style=\\'font-size: 15rem;\\'>🎉</span>'">`;
             } else {
-                imageDisplay = `<span style="font-size: 3rem;">${ad.icon}</span>`;
+                imageDisplay = ad.icon;
             }
         } else {
-            imageDisplay = '<span style="font-size: 3rem;">🎉</span>';
+            imageDisplay = '🎉';
         }
         
         return `

@@ -312,6 +312,9 @@ input:focus, select:focus {
 .ads-container {
     display: grid;
     gap: 2rem;
+    /* عرض بطاقتي الإعلانات والعروض بشكل عمودين متساويين على الشاشات المتوسطة والكبيرة */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    align-items: start;
 }
 
 .section-card {
@@ -347,7 +350,8 @@ input:focus, select:focus {
 }
 
 .ad-image {
-    width: 100px;
+    /* تم توحيد الحجم ليتوافق مع الأنماط المضمّنة في JavaScript (60x60) */
+    width: 60px;
     height: 60px;
     background: #e2e8f0;
     border-radius: 0.5rem;
@@ -355,6 +359,43 @@ input:focus, select:focus {
     align-items: center;
     justify-content: center;
     font-size: 2rem;
+}
+
+/* Ensure images inside .ad-image scale and offers use identical text sizing/spacing */
+.ad-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Make offer-item use exact same visual rules as ad-item */
+.offer-item {
+    /* inherits background, padding, border-radius from .ad-item via shared selector
+       but add explicit alignment/height to ensure parity */
+    min-height: 72px;
+}
+
+.ad-item, .offer-item {
+    align-items: center; /* ensure vertical alignment */
+}
+
+.ad-item h4, .offer-item h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.ad-item p, .offer-item p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.ads-list .ad-item + .ad-item,
+.offers-list .offer-item + .offer-item {
+    margin-top: 0.75rem; /* consistent spacing between items */
 }
 
 @media (max-width: 768px) {
