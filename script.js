@@ -197,22 +197,22 @@ function loadOffers() {
         return;
     }
     
+    // Render offers using the same card structure as ads so appearance matches
     offersGrid.innerHTML = offers.map(offer => {
-        // Display image
         let imageDisplay = '';
         if (offer.icon) {
             if (offer.icon.startsWith('http') || offer.icon.startsWith('data:image') || offer.icon.startsWith('logo.')) {
-                imageDisplay = `<img src="${offer.icon}" alt="${offer.title}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;" onerror="this.outerHTML='<span style=\\'font-size: 3rem;\\'>🎁</span>'">`;
+                imageDisplay = `<img src="${offer.icon}" alt="${offer.title}" onerror="this.outerHTML='<span style=\\'font-size: 12rem;\\'>🎁</span>'">`;
             } else {
-                imageDisplay = `<span style="font-size: 3rem;">${offer.icon}</span>`;
+                imageDisplay = offer.icon;
             }
         } else {
-            imageDisplay = '<span style="font-size: 3rem;">🎁</span>';
+            imageDisplay = '🎁';
         }
-        
+
         return `
-            <div class="offer-card">
-                <div class="offer-icon">${imageDisplay}</div>
+            <div class="ad-card">
+                <div class="ad-icon">${imageDisplay}</div>
                 <h3>${offer.title}</h3>
                 <p>${offer.discount}</p>
             </div>
