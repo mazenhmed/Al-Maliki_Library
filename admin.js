@@ -268,18 +268,35 @@ function loadAds() {
         return;
     }
     
-    adsList.innerHTML = ads.map((ad, index) => `
-        <div class="ad-item">
-            <div class="ad-preview">
-                <div class="ad-image">${ad.icon}</div>
-                <div>
-                    <h4>${ad.title}</h4>
-                    <p style="color: #64748b; font-size: 0.875rem;">${ad.description}</p>
+    adsList.innerHTML = ads.map((ad, index) => {
+        // Display image
+        let imageDisplay = '';
+        if (ad.icon) {
+            if (ad.icon.startsWith('http') || ad.icon.startsWith('data:image') || ad.icon.startsWith('logo.')) {
+                imageDisplay = `<img src="${ad.icon}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎉</span>'">`;
+            } else {
+                imageDisplay = `<span style="font-size: 2rem;">${ad.icon}</span>`;
+            }
+        } else {
+            imageDisplay = '<span style="font-size: 2rem;">🎉</span>';
+        }
+        
+        return `
+            <div class="ad-item">
+                <div class="ad-preview">
+                    <div class="ad-image">${imageDisplay}</div>
+                    <div>
+                        <h4>${ad.title}</h4>
+                        <p style="color: #64748b; font-size: 0.875rem;">${ad.description}</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-edit" onclick="editAd(${index})">✏️</button>
+                    <button class="btn btn-danger" onclick="deleteAd(${index})">🗑️</button>
                 </div>
             </div>
-            <button class="btn btn-danger" onclick="deleteAd(${index})">🗑️</button>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Get ads
@@ -298,24 +315,85 @@ function getAds() {
     return defaultAds;
 }
 
-// Add advertisement
-function addAdvertisement() {
-    const icon = prompt('أدخل الرمز التعبيري للإعلان:');
-    if (!icon) return;
-    
-    const title = prompt('أدخل عنوان الإعلان:');
-    if (!title) return;
-    
-    const description = prompt('أدخل وصف الإعلان:');
-    if (!description) return;
+// Show add advertisement modal
+function showAddAdModal() {
+    document.getElementById('adModalTitle').textContent = 'إضافة إعلان جديد';
+    document.getElementById('adForm').reset();
+    document.getElementById('adIndex').value = '';
+    document.getElementById('adImagePreview').style.display = 'none';
+    document.getElementById('adModal').classList.add('show');
+}
+
+// Close advertisement modal
+function closeAdModal() {
+    document.getElementById('adModal').classList.remove('show');
+}
+
+// Handle ad image upload
+function handleAdImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('adIcon').value = e.target.result;
+            
+            // Show preview
+            const preview = document.getElementById('adImagePreview');
+            const previewImg = document.getElementById('adPreviewImg');
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Save advertisement
+function saveAd(event) {
+    event.preventDefault();
     
     const ads = getAds();
-    ads.push({ icon, title, description });
+    const index = document.getElementById('adIndex').value;
+    const iconInput = document.getElementById('adIcon').value || '🎉';
+    
+    const ad = {
+        title: document.getElementById('adTitle').value,
+        description: document.getElementById('adDescription').value,
+        icon: iconInput
+    };
+    
+    if (index !== '') {
+        ads[parseInt(index)] = ad;
+    } else {
+        ads.push(ad);
+    }
     
     localStorage.setItem('stationeryAds', JSON.stringify(ads));
     loadAds();
+    closeAdModal();
     
-    alert('تم إضافة الإعلان بنجاح!');
+    alert('تم حفظ الإعلان بنجاح!');
+}
+
+// Edit advertisement
+function editAd(index) {
+    const ads = getAds();
+    const ad = ads[index];
+    
+    document.getElementById('adModalTitle').textContent = 'تعديل الإعلان';
+    document.getElementById('adIndex').value = index;
+    document.getElementById('adTitle').value = ad.title;
+    document.getElementById('adDescription').value = ad.description;
+    document.getElementById('adIcon').value = ad.icon || '';
+    
+    // Show preview if it's an image URL or base64
+    if (ad.icon && (ad.icon.startsWith('http') || ad.icon.startsWith('data:image'))) {
+        const preview = document.getElementById('adImagePreview');
+        const previewImg = document.getElementById('adPreviewImg');
+        previewImg.src = ad.icon;
+        preview.style.display = 'block';
+    }
+    
+    document.getElementById('adModal').classList.add('show');
 }
 
 // Delete ad
@@ -339,18 +417,35 @@ function loadOffers() {
         return;
     }
     
-    offersList.innerHTML = offers.map((offer, index) => `
-        <div class="offer-item">
-            <div class="ad-preview">
-                <div class="ad-image">${offer.icon}</div>
-                <div>
-                    <h4>${offer.title}</h4>
-                    <p style="color: #64748b; font-size: 0.875rem;">${offer.discount}</p>
+    offersList.innerHTML = offers.map((offer, index) => {
+        // Display image
+        let imageDisplay = '';
+        if (offer.icon) {
+            if (offer.icon.startsWith('http') || offer.icon.startsWith('data:image') || offer.icon.startsWith('logo.')) {
+                imageDisplay = `<img src="${offer.icon}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎁</span>'">`;
+            } else {
+                imageDisplay = `<span style="font-size: 2rem;">${offer.icon}</span>`;
+            }
+        } else {
+            imageDisplay = '<span style="font-size: 2rem;">🎁</span>';
+        }
+        
+        return `
+            <div class="offer-item">
+                <div class="ad-preview">
+                    <div class="ad-image">${imageDisplay}</div>
+                    <div>
+                        <h4>${offer.title}</h4>
+                        <p style="color: #64748b; font-size: 0.875rem;">${offer.discount}</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-edit" onclick="editOffer(${index})">✏️</button>
+                    <button class="btn btn-danger" onclick="deleteOffer(${index})">🗑️</button>
                 </div>
             </div>
-            <button class="btn btn-danger" onclick="deleteOffer(${index})">🗑️</button>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Get offers
@@ -369,24 +464,85 @@ function getOffers() {
     return defaultOffers;
 }
 
-// Add offer
-function addOffer() {
-    const icon = prompt('أدخل الرمز التعبيري للعرض:');
-    if (!icon) return;
-    
-    const title = prompt('أدخل عنوان العرض:');
-    if (!title) return;
-    
-    const discount = prompt('أدخل تفاصيل العرض:');
-    if (!discount) return;
+// Show add offer modal
+function showAddOfferModal() {
+    document.getElementById('offerModalTitle').textContent = 'إضافة عرض جديد';
+    document.getElementById('offerForm').reset();
+    document.getElementById('offerIndex').value = '';
+    document.getElementById('offerImagePreview').style.display = 'none';
+    document.getElementById('offerModal').classList.add('show');
+}
+
+// Close offer modal
+function closeOfferModal() {
+    document.getElementById('offerModal').classList.remove('show');
+}
+
+// Handle offer image upload
+function handleOfferImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('offerIcon').value = e.target.result;
+            
+            // Show preview
+            const preview = document.getElementById('offerImagePreview');
+            const previewImg = document.getElementById('offerPreviewImg');
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Save offer
+function saveOffer(event) {
+    event.preventDefault();
     
     const offers = getOffers();
-    offers.push({ icon, title, discount });
+    const index = document.getElementById('offerIndex').value;
+    const iconInput = document.getElementById('offerIcon').value || '🎁';
+    
+    const offer = {
+        title: document.getElementById('offerTitle').value,
+        discount: document.getElementById('offerDiscount').value,
+        icon: iconInput
+    };
+    
+    if (index !== '') {
+        offers[parseInt(index)] = offer;
+    } else {
+        offers.push(offer);
+    }
     
     localStorage.setItem('stationeryOffers', JSON.stringify(offers));
     loadOffers();
+    closeOfferModal();
     
-    alert('تم إضافة العرض بنجاح!');
+    alert('تم حفظ العرض بنجاح!');
+}
+
+// Edit offer
+function editOffer(index) {
+    const offers = getOffers();
+    const offer = offers[index];
+    
+    document.getElementById('offerModalTitle').textContent = 'تعديل العرض';
+    document.getElementById('offerIndex').value = index;
+    document.getElementById('offerTitle').value = offer.title;
+    document.getElementById('offerDiscount').value = offer.discount;
+    document.getElementById('offerIcon').value = offer.icon || '';
+    
+    // Show preview if it's an image URL or base64
+    if (offer.icon && (offer.icon.startsWith('http') || offer.icon.startsWith('data:image'))) {
+        const preview = document.getElementById('offerImagePreview');
+        const previewImg = document.getElementById('offerPreviewImg');
+        previewImg.src = offer.icon;
+        preview.style.display = 'block';
+    }
+    
+    document.getElementById('offerModal').classList.add('show');
 }
 
 // Delete offer

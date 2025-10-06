@@ -146,13 +146,27 @@ function loadAds() {
         return;
     }
     
-    adsSlider.innerHTML = ads.map(ad => `
-        <div class="ad-card">
-            <div class="ad-icon">${ad.icon}</div>
-            <h3>${ad.title}</h3>
-            <p>${ad.description}</p>
-        </div>
-    `).join('');
+    adsSlider.innerHTML = ads.map(ad => {
+        // Display image
+        let imageDisplay = '';
+        if (ad.icon) {
+            if (ad.icon.startsWith('http') || ad.icon.startsWith('data:image') || ad.icon.startsWith('logo.')) {
+                imageDisplay = `<img src="${ad.icon}" alt="${ad.title}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;" onerror="this.outerHTML='<span style=\\'font-size: 3rem;\\'>🎉</span>'">`;
+            } else {
+                imageDisplay = `<span style="font-size: 3rem;">${ad.icon}</span>`;
+            }
+        } else {
+            imageDisplay = '<span style="font-size: 3rem;">🎉</span>';
+        }
+        
+        return `
+            <div class="ad-card">
+                <div class="ad-icon">${imageDisplay}</div>
+                <h3>${ad.title}</h3>
+                <p>${ad.description}</p>
+            </div>
+        `;
+    }).join('');
 }
 
 // Get ads from localStorage
@@ -183,13 +197,27 @@ function loadOffers() {
         return;
     }
     
-    offersGrid.innerHTML = offers.map(offer => `
-        <div class="offer-card">
-            <div class="offer-icon">${offer.icon}</div>
-            <h3>${offer.title}</h3>
-            <p>${offer.discount}</p>
-        </div>
-    `).join('');
+    offersGrid.innerHTML = offers.map(offer => {
+        // Display image
+        let imageDisplay = '';
+        if (offer.icon) {
+            if (offer.icon.startsWith('http') || offer.icon.startsWith('data:image') || offer.icon.startsWith('logo.')) {
+                imageDisplay = `<img src="${offer.icon}" alt="${offer.title}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;" onerror="this.outerHTML='<span style=\\'font-size: 3rem;\\'>🎁</span>'">`;
+            } else {
+                imageDisplay = `<span style="font-size: 3rem;">${offer.icon}</span>`;
+            }
+        } else {
+            imageDisplay = '<span style="font-size: 3rem;">🎁</span>';
+        }
+        
+        return `
+            <div class="offer-card">
+                <div class="offer-icon">${imageDisplay}</div>
+                <h3>${offer.title}</h3>
+                <p>${offer.discount}</p>
+            </div>
+        `;
+    }).join('');
 }
 
 // Get offers from localStorage

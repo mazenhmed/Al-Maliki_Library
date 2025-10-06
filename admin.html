@@ -102,13 +102,13 @@
                 <div class="ads-container">
                     <div class="section-card">
                         <h2>الصور الإعلانية</h2>
-                        <button class="btn btn-primary" onclick="addAdvertisement()">➕ إضافة إعلان</button>
+                        <button class="btn btn-primary" onclick="showAddAdModal()">➕ إضافة إعلان</button>
                         <div id="adsList" class="ads-list"></div>
                     </div>
 
                     <div class="section-card">
                         <h2>العروض الخاصة</h2>
-                        <button class="btn btn-primary" onclick="addOffer()">➕ إضافة عرض</button>
+                        <button class="btn btn-primary" onclick="showAddOfferModal()">➕ إضافة عرض</button>
                         <div id="offersList" class="offers-list"></div>
                     </div>
                 </div>
@@ -183,6 +183,90 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeProductModal()">إلغاء</button>
                     <button type="submit" class="btn btn-primary">حفظ المنتج</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Advertisement Modal -->
+    <div id="adModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="adModalTitle">إضافة إعلان جديد</h2>
+                <button class="close-btn" onclick="closeAdModal()">×</button>
+            </div>
+            <form id="adForm" onsubmit="saveAd(event)">
+                <input type="hidden" id="adIndex">
+                
+                <div class="form-group">
+                    <label>عنوان الإعلان *</label>
+                    <input type="text" id="adTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>وصف الإعلان *</label>
+                    <textarea id="adDescription" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>صورة الإعلان</label>
+                    <input type="file" id="adImageFile" accept="image/*" onchange="handleAdImageUpload(event)">
+                    <small style="color: #64748b; display: block; margin-top: 0.5rem;">أو أدخل رابط الصورة أو رمز تعبيري</small>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط الصورة أو الرمز التعبيري</label>
+                    <input type="text" id="adIcon" placeholder="مثال: 🎉 أو https://example.com/image.jpg">
+                    <div id="adImagePreview" style="margin-top: 1rem; display: none;">
+                        <img id="adPreviewImg" style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid #e2e8f0;" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAdModal()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ الإعلان</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Offer Modal -->
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="offerModalTitle">إضافة عرض جديد</h2>
+                <button class="close-btn" onclick="closeOfferModal()">×</button>
+            </div>
+            <form id="offerForm" onsubmit="saveOffer(event)">
+                <input type="hidden" id="offerIndex">
+                
+                <div class="form-group">
+                    <label>عنوان العرض *</label>
+                    <input type="text" id="offerTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>تفاصيل العرض *</label>
+                    <textarea id="offerDiscount" rows="3" required placeholder="مثال: خصم 20% على جميع الأقلام"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>صورة العرض</label>
+                    <input type="file" id="offerImageFile" accept="image/*" onchange="handleOfferImageUpload(event)">
+                    <small style="color: #64748b; display: block; margin-top: 0.5rem;">أو أدخل رابط الصورة أو رمز تعبيري</small>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط الصورة أو الرمز التعبيري</label>
+                    <input type="text" id="offerIcon" placeholder="مثال: 🎁 أو https://example.com/image.jpg">
+                    <div id="offerImagePreview" style="margin-top: 1rem; display: none;">
+                        <img id="offerPreviewImg" style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid #e2e8f0;" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeOfferModal()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ العرض</button>
                 </div>
             </form>
         </div>
