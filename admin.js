@@ -273,7 +273,7 @@ function loadAds() {
         let imageDisplay = '';
         if (ad.icon) {
             if (ad.icon.startsWith('http') || ad.icon.startsWith('data:image') || ad.icon.startsWith('logo.')) {
-                imageDisplay = `<img src="${ad.icon}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎉</span>'">`;
+                imageDisplay = `<img src="${ad.icon}" style="width: 60px; height: 60px; object-fit: fill; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎉</span>'">`;
             } else {
                 imageDisplay = `<span style="font-size: 2rem;">${ad.icon}</span>`;
             }
@@ -422,7 +422,7 @@ function loadOffers() {
         let imageDisplay = '';
         if (offer.icon) {
             if (offer.icon.startsWith('http') || offer.icon.startsWith('data:image') || offer.icon.startsWith('logo.')) {
-                imageDisplay = `<img src="${offer.icon}" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎁</span>'">`;
+                imageDisplay = `<img src="${offer.icon}" style="width: 60px; height: 60px; object-fit: fill; border-radius: 8px;" onerror="this.outerHTML='<span style=\"font-size: 2rem;\">🎁</span>'">`;
             } else {
                 imageDisplay = `<span style="font-size: 2rem;">${offer.icon}</span>`;
             }
